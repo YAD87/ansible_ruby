@@ -1,0 +1,12 @@
+---
+
+- hosts: ruby
+  user: chiuser
+  gather_facts: no
+  var_files:
+   - group_vars/al.yml
+
+  roles:
+   - infra
+   - package
+   - web

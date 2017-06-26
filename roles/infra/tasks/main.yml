@@ -1,0 +1,37 @@
+---
+- name: create deploy user
+  user:
+    name: "{{ deploy_user }}"
+    createhome: yes
+    shell: /bin/bash
+    generate_ssh_key: yes
+
+
+- name: add user to sudo
+  shell: adduser {{ deploy_user }} sudo
+
+- name: add ssh to authorized
+  authorized_key:
+    key: "{{ lookup('file', '{{ public_key }}') }}"
+    user: "{{ deploy_user }}
+    state: present
+
+- name: creat app  folder
+  file: path= {{ app_path }} owner={{ deploy_user }} group={{ deploy_user }} state=directory
+
+- name: create shared directories
+  file: path= {{ app_path }}/shared/{{ item }} owner={{ deploy_user }} group={{ deploy_user }} state=directory
+  with_items:
+    - tmp
+    - tmp/pids
+    - tmp/puma
+    - logs
+    - public
+    - bundle
+    - bin
+    - config
+    - config/puma
+  tags: shared
+
+- name: install database.yml
+  template: src =database.yml.j2 dest={{ app_path }}/shared/config/database.yml force=yes mode=755 owner={{ deploy_user }}

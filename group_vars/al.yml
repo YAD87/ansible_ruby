@@ -1,0 +1,18 @@
+---
+
+user: chiuser
+deploy_user: banan
+app_name: rubin
+app_path: /home/{{ deploy_user }}/{{ app_name }}
+
+#git_repo:
+rails_env: production
+#ruby_version:
+
+dbname: rabit
+dbuser: rabit
+dbpassword: rabit 
+webserver_name: 192.168.2.185
+
+
+public_key: /home/user/.ssh/id_rsa.pub
